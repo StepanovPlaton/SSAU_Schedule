@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SSAU Schedule</string>
+    <string name="sign_in">Sign in</string>
+    <string name="login">Login</string>
+    <string name="enter_your_login">Enter your login</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="password">Password</string>
+    <string name="samara_university">Samara university</string>
+    <string name="incorrect_login_or_password">Incorrect login or password</string>
+    <string name="login_is_too_short">Login is too short</string>
+    <string name="password_is_too_short">Password is too short</string>
+</resources>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Расписание СамГУ</string>
+    <string name="sign_in">Войти</string>
+    <string name="login">Логин</string>
+    <string name="enter_your_login">Введите ваш логин</string>
+    <string name="enter_your_password">Введите ваш пароль</string>
+    <string name="password">Пароль</string>
+    <string name="samara_university">Самарский университет</string>
+    <string name="incorrect_login_or_password">Неверный логин или пароль</string>
+    <string name="login_is_too_short">Логин слишком короткий</string>
+    <string name="password_is_too_short">Пароль слишком короткий</string>
+</resources>
