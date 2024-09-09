@@ -9,4 +9,8 @@
     <string name="incorrect_login_or_password">Неверный логин или пароль</string>
     <string name="login_is_too_short">Логин слишком короткий</string>
     <string name="password_is_too_short">Пароль слишком короткий</string>
+    <string name="not_member_of_any_group">Пользователь не состоит ни в одной учебной группе. Для него нельзя получить расписание</string>
+    <string name="failed_get_user_groups">Не получилось получить список групп, в которых состоит пользователь. Расписание нельзя получить без учебной группы</string>
+    <string name="failed_get_years">Не получилось получить список учебных годов. Расписание нельзя получить без учебного года</string>
+    <string name="failder_get_user_details">Не получилось получить информацию о пользователе. Расписание нельзя получить без пользовательских данных</string>
 </resources>

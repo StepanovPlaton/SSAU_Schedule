@@ -25,5 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SSAU_Schedule"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 </manifest>

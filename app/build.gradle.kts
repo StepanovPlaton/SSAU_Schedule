@@ -3,6 +3,7 @@ import com.android.build.api.variant.BuildConfigField
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -35,8 +36,21 @@ android {
     androidComponents {
         onVariants {
             it.buildConfigFields.putAll(mapOf(
-                Pair("BASE_URL", BuildConfigField("String", "\"https://lk.ssau.ru/\"", null)),
-                Pair("SIGN_IN_URL", BuildConfigField("String", "\"account/login\"", null))
+                Pair("BASE_URL",
+                    BuildConfigField("String",
+                        "\"https://lk.ssau.ru/\"", null)),
+                Pair("SIGN_IN_URL",
+                    BuildConfigField("String",
+                        "\"account/login\"", null)),
+                Pair("USER_DETAILS_URL",
+                    BuildConfigField("String",
+                        "\"api/proxy/current-user-details\"", null)),
+                Pair("USER_GROUPS_URL",
+                    BuildConfigField("String",
+                        "\"api/proxy/personal/groups\"", null)),
+                Pair("YEARS_URL",
+                    BuildConfigField("String",
+                        "\"api/proxy/dictionaries?slug=unified_years\"", null))
             ))
         }
     }
@@ -62,7 +76,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -82,4 +95,5 @@ dependencies {
 
     implementation(libs.squareup.okhttp)
     implementation(libs.androidx.datastore)
+    implementation(libs.kotlinx.serialization.json)
 }

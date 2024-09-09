@@ -10,4 +10,8 @@
     <string name="incorrect_login_or_password">Incorrect login or password</string>
     <string name="login_is_too_short">Login is too short</string>
     <string name="password_is_too_short">Password is too short</string>
+    <string name="not_member_of_any_group">The user is not a member of any study group. You can\'t get a schedule for him</string>
+    <string name="failed_get_user_groups">Не получилось получить список групп, в которых состоит пользователь. Расписание нельзя получить без учебной группы</string>
+    <string name="failed_get_years">It was not possible to obtain a list of academic years. The timetable cannot be obtained without the academic year</string>
+    <string name="failder_get_user_details">Failed to retrieve user information. The schedule cannot be obtained without user data</string>
 </resources>

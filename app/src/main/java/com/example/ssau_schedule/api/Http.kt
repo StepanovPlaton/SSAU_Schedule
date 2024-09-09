@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import java.io.IOException
+import okio.IOException
 
 enum class Method {
     GET,
@@ -18,9 +18,14 @@ enum class Method {
     DELETE
 }
 
-typealias HttpResponseCallback = (response: Response) -> Unit
-typealias HttpExceptionVerifyCallback = (exception: IOException, response: Response?) -> Boolean
-typealias HttpExceptionCallback = (exception: IOException, response: Response?) -> Unit
+typealias HttpRequestException = IOException
+
+typealias HttpResponseCallback =
+            (response: Response) -> Unit
+typealias HttpExceptionVerifyCallback =
+            (exception: HttpRequestException, response: Response?) -> Boolean
+typealias HttpExceptionCallback =
+            (exception: HttpRequestException, response: Response?) -> Unit
 
 class Http {
     val http = OkHttpClient()
@@ -33,22 +38,38 @@ class Http {
         callback: HttpResponseCallback,
         exceptionCallback: HttpExceptionVerifyCallback? = null
     ) {
-        val request = Request.Builder().url(BuildConfig.BASE_URL+url).
-                                                method(method.toString(), body)
-        if(headers !== null) request.headers(headers)
+        val request =
+            Request.Builder().url(BuildConfig.BASE_URL + url).method(method.toString(), body)
+        if (headers !== null) request.headers(headers)
         http.newCall(request.build()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
+            override fun onFailure(call: Call, e: HttpRequestException) {
                 Log.e("Http request failed", e.toString())
-                if(exceptionCallback !== null) exceptionCallback(e, null)
+                exceptionCallback?.invoke(e, null)
             }
 
             override fun onResponse(call: Call, response: Response) {
                 var runCallback = false
                 if (!response.isSuccessful && exceptionCallback !== null)
                     runCallback = exceptionCallback(
-                        IOException("Http response is not successful"), response)
-                if(runCallback || response.isSuccessful) callback(response)
+                        HttpRequestException("Http response is not successful"), response
+                    )
+                if (runCallback || response.isSuccessful) callback(response)
             }
         })
     }
+
+    fun request(
+        method: Method,
+        url: String,
+        headers: Headers? = null,
+        callback: HttpResponseCallback,
+        exceptionCallback: HttpExceptionVerifyCallback? = null
+    ) = request(method, url, null, headers, callback, exceptionCallback)
+
+    fun request(
+        method: Method,
+        url: String,
+        callback: HttpResponseCallback,
+        exceptionCallback: HttpExceptionVerifyCallback? = null
+    ) = request(method, url, null, null, callback, exceptionCallback)
 }
