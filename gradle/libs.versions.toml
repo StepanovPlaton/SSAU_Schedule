@@ -12,6 +12,8 @@ okhttp = "4.12.0"
 datastore = "1.1.1"
 media3Common = "1.4.1"
 kotlinSerializationJson = "1.7.1"
+room = "2.6.1"
+workRuntimeKtx = "2.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,9 +34,15 @@ squareup-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref
 androidx-datastore = { group = "androidx.datastore", name="datastore-preferences", version.ref = "datastore" }
 androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3Common" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+devtools-ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.24" }
+androidx-room = { id = "androidx.room", version.ref = "room" }

@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -50,7 +52,10 @@ android {
                         "\"api/proxy/personal/groups\"", null)),
                 Pair("YEARS_URL",
                     BuildConfigField("String",
-                        "\"api/proxy/dictionaries?slug=unified_years\"", null))
+                        "\"api/proxy/dictionaries?slug=unified_years\"", null)),
+                Pair("LESSONS_URL",
+                    BuildConfigField("String",
+                        "\"/api/proxy/timetable/get-timetable\"", null))
             ))
         }
     }
@@ -73,6 +78,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -85,6 +94,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -94,6 +104,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.squareup.okhttp)
+
     implementation(libs.androidx.datastore)
+
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.room.ktx)
 }

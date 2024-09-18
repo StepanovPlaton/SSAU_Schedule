@@ -10,6 +10,8 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import okio.IOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 enum class Method {
     GET,
@@ -20,56 +22,44 @@ enum class Method {
 
 typealias HttpRequestException = IOException
 
-typealias HttpResponseCallback =
-            (response: Response) -> Unit
-typealias HttpExceptionVerifyCallback =
-            (exception: HttpRequestException, response: Response?) -> Boolean
-typealias HttpExceptionCallback =
-            (exception: HttpRequestException, response: Response?) -> Unit
-
 class Http {
     val http = OkHttpClient()
 
-    fun request(
+    suspend fun request(
         method: Method,
         url: String,
         body: RequestBody? = null,
         headers: Headers? = null,
-        callback: HttpResponseCallback,
-        exceptionCallback: HttpExceptionVerifyCallback? = null
-    ) {
+    ): Pair<Response?, HttpRequestException?> {
         val request =
             Request.Builder().url(BuildConfig.BASE_URL + url).method(method.toString(), body)
         if (headers !== null) request.headers(headers)
-        http.newCall(request.build()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: HttpRequestException) {
-                Log.e("Http request failed", e.toString())
-                exceptionCallback?.invoke(e, null)
-            }
+        return suspendCoroutine { coroutine ->
+            http.newCall(request.build()).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: HttpRequestException) {
+                    Log.e("Http request failed", e.toString())
+                    coroutine.resume(Pair(null, e))
+                }
 
-            override fun onResponse(call: Call, response: Response) {
-                var runCallback = false
-                if (!response.isSuccessful && exceptionCallback !== null)
-                    runCallback = exceptionCallback(
-                        HttpRequestException("Http response is not successful"), response
-                    )
-                if (runCallback || response.isSuccessful) callback(response)
-            }
-        })
+                override fun onResponse(call: Call, response: Response) {
+                    if (!response.isSuccessful)
+                        coroutine.resume(Pair(response,
+                            HttpRequestException("Http response is not successful")))
+                    else coroutine.resume(Pair(response, null))
+                }
+            })
+        }
+
     }
 
-    fun request(
+    suspend fun request(
         method: Method,
         url: String,
         headers: Headers? = null,
-        callback: HttpResponseCallback,
-        exceptionCallback: HttpExceptionVerifyCallback? = null
-    ) = request(method, url, null, headers, callback, exceptionCallback)
+    ) = request(method, url, null, headers)
 
-    fun request(
+    suspend fun request(
         method: Method,
         url: String,
-        callback: HttpResponseCallback,
-        exceptionCallback: HttpExceptionVerifyCallback? = null
-    ) = request(method, url, null, null, callback, exceptionCallback)
+    ) = request(method, url, null, null)
 }

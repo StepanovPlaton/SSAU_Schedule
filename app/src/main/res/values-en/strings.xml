@@ -13,5 +13,10 @@
     <string name="not_member_of_any_group">The user is not a member of any study group. You can\'t get a schedule for him</string>
     <string name="failed_get_user_groups">Не получилось получить список групп, в которых состоит пользователь. Расписание нельзя получить без учебной группы</string>
     <string name="failed_get_years">It was not possible to obtain a list of academic years. The timetable cannot be obtained without the academic year</string>
-    <string name="failder_get_user_details">Failed to retrieve user information. The schedule cannot be obtained without user data</string>
+    <string name="failed_get_user_details">Failed to retrieve user information. The schedule cannot be obtained without user data</string>
+    <string name="failed_get_lessons">Failed to get schedule</string>
+    <string name="hello">Hello</string>
+    <string name="education_week">education week</string>
+    <string name="education_year">education year</string>
+    <string name="schedule_for_group">Schedule for the group</string>
 </resources>

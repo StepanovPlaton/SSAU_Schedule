@@ -12,5 +12,10 @@
     <string name="not_member_of_any_group">Пользователь не состоит ни в одной учебной группе. Для него нельзя получить расписание</string>
     <string name="failed_get_user_groups">Не получилось получить список групп, в которых состоит пользователь. Расписание нельзя получить без учебной группы</string>
     <string name="failed_get_years">Не получилось получить список учебных годов. Расписание нельзя получить без учебного года</string>
-    <string name="failder_get_user_details">Не получилось получить информацию о пользователе. Расписание нельзя получить без пользовательских данных</string>
+    <string name="failed_get_user_details">Не получилось получить информацию о пользователе. Расписание нельзя получить без пользовательских данных</string>
+    <string name="failed_get_lessons">Не удалось получить расписание</string>
+    <string name="hello">Здравствуйте</string>
+    <string name="education_week">учебная неделя</string>
+    <string name="education_year">учебный год</string>
+    <string name="schedule_for_group">Расписание для группы</string>
 </resources>

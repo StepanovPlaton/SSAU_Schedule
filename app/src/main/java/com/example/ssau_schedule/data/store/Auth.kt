@@ -19,31 +19,25 @@ class AuthStore {
     }
 
     companion object {
+        suspend fun setAuthToken(
+            token: String,
+            context: Context,
+        ) { context.authStore.edit { authStore -> authStore[Keys.AUTH_TOKEN] = token } }
+
         fun setAuthToken(
             token: String,
             context: Context,
             scope: CoroutineScope,
             callback: (() -> Unit)? = null
-        ) {
-            scope.launch {
-                context.authStore.edit { authStore ->
-                    authStore[Keys.AUTH_TOKEN] = token
-                }.run { callback?.invoke() }
-            }
-        }
+        ) = scope.launch { setAuthToken(token, context) }.run { callback?.invoke() }
+
+        suspend fun getAuthToken(context: Context) =
+            context.authStore.data.map { authStore -> authStore[Keys.AUTH_TOKEN] }.first()
 
         fun getAuthToken(
             context: Context,
             scope: CoroutineScope,
             callback: (token: String?) -> Unit
-        ) {
-            scope.launch {
-                val authTokenFlow = context.authStore.data
-                    .map { authStore -> authStore[Keys.AUTH_TOKEN] }
-                callback(authTokenFlow.first())
-            }
-        }
+        ) = scope.launch { callback(getAuthToken(context)) }
     }
-
-
 }
