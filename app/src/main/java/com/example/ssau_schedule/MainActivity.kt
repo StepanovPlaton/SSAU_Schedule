@@ -95,37 +95,37 @@ class MainActivity : ComponentActivity() {
         val pagerState = rememberPagerState(
             initialPage = currentDayOfWeek.intValue-1, pageCount = {Int.MAX_VALUE})
 
-        LaunchedEffect(false) {
-            lessons.value = database.lessonDao().getAll()
-        }
-
 //        LaunchedEffect(false) {
-//            val generalData = StoreUtils.getGeneralData(applicationContext)
-//            if(generalData == null)
-//                startActivity(Intent(applicationContext, AuthActivity::class.java))
-//            else {
-//                val week = generalData.year.getWeekOfDate(Date())
-//                val (apiLessons, apiError) = lessonAPI.getLessons(
-//                    generalData.token, generalData.group, generalData.year, week)
-//                if(apiLessons != null && apiError == null) {
-//                    val (databaseLessons, converterErrors) = apiLessons.toLessons(week)
-//                    Log.i("Lessons", Json.encodeToString(apiLessons))
-//                    database.lessonDao().insert(*databaseLessons.toTypedArray())
-//                    converterErrors.forEach { error ->
-//                        val message = error.getMessage(applicationContext)
-//                        if(message != null) snackbarHostState.showSnackbar(message)
-//                    }
-//                    lessons.value = databaseLessons
-//                } else {
-//                    if(apiError == LessonAPIErrorMessage.USER_NOT_AUTHORIZED) {
-//                        startActivity(Intent(applicationContext, AuthActivity::class.java))
-//                    } else {
-//                        val message = apiError?.getMessage(applicationContext)
-//                        if(message != null) snackbarHostState.showSnackbar(message)
-//                    }
-//                }
-//            }
+//            lessons.value = database.lessonDao().getAll()
 //        }
+
+        LaunchedEffect(false) {
+            val generalData = StoreUtils.getGeneralData(applicationContext)
+            if(generalData == null)
+                startActivity(Intent(applicationContext, AuthActivity::class.java))
+            else {
+                val week = generalData.year.getWeekOfDate(Date())
+                val (apiLessons, apiError) = lessonAPI.getLessons(
+                    generalData.token, generalData.group, generalData.year, week)
+                if(apiLessons != null && apiError == null) {
+                    val (databaseLessons, converterErrors) = apiLessons.toLessons(week)
+                    Log.i("Lessons", Json.encodeToString(apiLessons))
+                    database.lessonDao().insert(*databaseLessons.toTypedArray())
+                    converterErrors.forEach { error ->
+                        val message = error.getMessage(applicationContext)
+                        if(message != null) snackbarHostState.showSnackbar(message)
+                    }
+                    lessons.value = databaseLessons
+                } else {
+                    if(apiError == LessonAPIErrorMessage.USER_NOT_AUTHORIZED) {
+                        startActivity(Intent(applicationContext, AuthActivity::class.java))
+                    } else {
+                        val message = apiError?.getMessage(applicationContext)
+                        if(message != null) snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
 
         Scaffold(
             snackbarHost = {
