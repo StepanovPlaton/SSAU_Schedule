@@ -1,6 +1,5 @@
 package com.example.ssau_schedule.components
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -12,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,9 +62,11 @@ fun LessonCard(modifier: Modifier, lesson: Lesson) {
 
 @Composable
 fun LessonCards(lessons: List<Lesson>) {
-    Column(Modifier.verticalScroll(ScrollState(0))) {
-        lessons.forEach { lesson ->
-            LessonCard(Modifier, lesson)
+    Box(Modifier.fillMaxHeight().fillMaxWidth()) {
+        LazyColumn {
+            items(lessons.count()) {
+                LessonCard(Modifier, lessons[it])
+            }
         }
     }
 }
