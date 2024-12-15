@@ -73,6 +73,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -114,4 +117,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.androidx.room.ktx)
+
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material)
 }

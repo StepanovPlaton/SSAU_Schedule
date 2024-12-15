@@ -47,9 +47,11 @@ class GroupStore {
                 .map { groupStore -> groupStore[Keys.CURRENT_GROUP_ID] }.first()
             val currentGroupName = context.groupStore.data
                 .map { groupStore -> groupStore[Keys.CURRENT_GROUP_NAME] }.first()
-            return if(currentGroupId != null && currentGroupName != null)
-                Group(id = currentGroupId,
-                    name = currentGroupName)
+            return if (currentGroupId != null && currentGroupName != null)
+                Group(
+                    id = currentGroupId,
+                    name = currentGroupName
+                )
             else null
         }
 

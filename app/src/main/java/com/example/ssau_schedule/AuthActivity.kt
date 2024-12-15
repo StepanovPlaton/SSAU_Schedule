@@ -110,7 +110,7 @@ class AuthActivity : ComponentActivity() {
         var entered by remember { mutableStateOf(false) }
 
         val keyboardOpen by Utils.keyboardState()
-        val snackbarHostState = remember { SnackbarHostState() }
+        val notificationState = remember { SnackbarHostState() }
         val logoHeight by animateFloatAsState(
             if (keyboardOpen && needAuth) 0f else min(
                 LocalConfiguration.current.screenWidthDp,
@@ -124,7 +124,7 @@ class AuthActivity : ComponentActivity() {
         )
 
         LaunchedEffect(user, group, year) {
-            if(user != null && group != null && year != null) {
+            if (user != null && group != null && year != null) {
                 delay(2500)
                 startActivity(Intent(applicationContext, MainActivity::class.java))
             }
@@ -134,22 +134,30 @@ class AuthActivity : ComponentActivity() {
             delay(3000)
 
             val token = AuthStore.getAuthToken(applicationContext)
-            if(token == null) { needAuth = true; return@LaunchedEffect }
+            if (token == null) {
+                needAuth = true; return@LaunchedEffect
+            }
 
             val (userDetails) = userAPI.getUserDetails(token)
-            if(userDetails == null) { needAuth = true; return@LaunchedEffect }
-            else { user = userDetails }
+            if (userDetails == null) {
+                needAuth = true; return@LaunchedEffect
+            } else {
+                user = userDetails
+            }
 
             val (groups, groupsError) = groupAPI.getUserGroups(token)
-            if(groups == null) {
-                if(groupsError != null && groupsError !=
-                    GroupAPIErrorMessage.USER_NOT_AUTHORIZED) {
+            if (groups == null) {
+                if (groupsError != null && groupsError !=
+                    GroupAPIErrorMessage.USER_NOT_AUTHORIZED
+                ) {
                     val message = groupsError.getMessage(applicationContext)
-                    if(message != null) snackbarHostState.showSnackbar(message)
-                } else { needAuth = true; return@LaunchedEffect }
+                    if (message != null) notificationState.showSnackbar(message)
+                } else {
+                    needAuth = true; return@LaunchedEffect
+                }
             } else {
                 val currentGroup = GroupStore.getCurrentGroup(applicationContext)
-                if(currentGroup != null && groups.contains(currentGroup)) group = currentGroup
+                if (currentGroup != null && groups.contains(currentGroup)) group = currentGroup
                 else {
                     GroupStore.setCurrentGroup(groups[0], applicationContext)
                     group = groups[0]
@@ -157,28 +165,31 @@ class AuthActivity : ComponentActivity() {
             }
 
             val (years, yearsError) = yearAPI.getYears(token)
-            if(years == null) {
-                if(yearsError != null && yearsError !=
-                    YearAPIErrorMessage.USER_NOT_AUTHORIZED) {
+            if (years == null) {
+                if (yearsError != null && yearsError !=
+                    YearAPIErrorMessage.USER_NOT_AUTHORIZED
+                ) {
                     val message = yearsError.getMessage(applicationContext)
-                    if(message != null) snackbarHostState.showSnackbar(message)
-                } else { needAuth = true; return@LaunchedEffect }
+                    if (message != null) notificationState.showSnackbar(message)
+                } else {
+                    needAuth = true; return@LaunchedEffect
+                }
             } else {
                 val currentRawYear = years.find { y -> y.isCurrent }
-                if(currentRawYear != null) {
+                if (currentRawYear != null) {
                     year = currentRawYear.toYear()
                     YearStore.setCurrentYear(year!!, applicationContext, authScope)
                 } else {
                     val message = YearAPIErrorMessage.FAILED_GET_YEARS
                         .getMessage(applicationContext)
-                    if(message != null) snackbarHostState.showSnackbar(message)
+                    if (message != null) notificationState.showSnackbar(message)
                 }
             }
         }
 
         Scaffold(
             snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) {
+                SnackbarHost(hostState = notificationState) {
                     Snackbar(
                         snackbarData = it,
                         containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -187,8 +198,12 @@ class AuthActivity : ComponentActivity() {
                 }
             }
         ) { padding ->
-            Box(Modifier.background(MaterialTheme.colorScheme.primary)
-                .fillMaxSize().padding(padding).imePadding(),
+            Box(
+                Modifier
+                    .background(MaterialTheme.colorScheme.primary)
+                    .fillMaxSize()
+                    .padding(padding)
+                    .imePadding(),
                 contentAlignment = BiasAlignment(0f, -0.25f),
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -196,19 +211,23 @@ class AuthActivity : ComponentActivity() {
                         Modifier
                             .widthIn(0.dp, 500.dp)
                             .height(logoHeight.dp)
-                            .padding(20.dp, 0.dp)) {
-                        Image(painterResource(R.drawable.ssau_logo_01),
+                            .padding(20.dp, 0.dp)
+                    ) {
+                        Image(
+                            painterResource(R.drawable.ssau_logo_01),
                             contentDescription = stringResource(R.string.samara_university),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(10.dp),
                             contentScale = ContentScale.FillWidth,
-                            alignment = Alignment.TopCenter)
+                            alignment = Alignment.TopCenter
+                        )
                     }
                     Box(
                         Modifier
                             .padding(20.dp, 0.dp)
-                            .widthIn(0.dp, 400.dp)) {
+                            .widthIn(0.dp, 400.dp)
+                    ) {
                         Column {
                             WelcomeMessage(user, group, year)
                             AuthForm(open = needAuth, authScope) {
@@ -230,26 +249,37 @@ class AuthActivity : ComponentActivity() {
         var password by remember { mutableStateOf("") }
         var error by remember { mutableStateOf<AuthErrorMessage?>(null) }
 
-        val height by animateDpAsState(if (open) 290.dp else 0.dp, label = "Auth form height",
+        val height by animateDpAsState(
+            if (open) 290.dp else 0.dp, label = "Auth form height",
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow
             )
         )
 
-        Card(Modifier.fillMaxWidth().height(height).padding(0.dp, 10.dp).shadow(10.dp),
+        Card(
+            Modifier
+                .fillMaxWidth()
+                .height(height)
+                .padding(0.dp, 10.dp)
+                .shadow(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background,
             ),
         ) {
-            Column(Modifier.fillMaxWidth().padding(30.dp, 20.dp),
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(30.dp, 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(stringResource(R.string.sign_in),
+                Text(
+                    stringResource(R.string.sign_in),
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.displaySmall)
+                    style = MaterialTheme.typography.displaySmall
+                )
                 OutlinedTextField(modifier = Modifier.fillMaxWidth(),
                     value = login,
                     onValueChange = { login = it; error = null },
@@ -262,14 +292,19 @@ class AuthActivity : ComponentActivity() {
                     label = { Text(stringResource(R.string.password)) },
                     placeholder = { Text(stringResource(R.string.enter_your_password)) })
                 Spacer(Modifier.height(2.dp))
-                Box(Modifier.fillMaxWidth().height(14.dp)) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(14.dp)) {
                     this@Column.AnimatedVisibility(
                         modifier = Modifier.align(Alignment.Center),
                         visible = error !== null
                     ) {
-                        Text(error?.getMessage(applicationContext) ?: "",
+                        Text(
+                            error?.getMessage(applicationContext) ?: "",
                             color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.labelSmall)
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
                 Spacer(Modifier.height(4.dp))
@@ -279,11 +314,10 @@ class AuthActivity : ComponentActivity() {
                         else if (password.length < 5) error = AuthErrorMessage.PASSWORD_IS_TOO_SHORT
                         else scope.launch {
                             val (token) = authAPI.signIn(login, password)
-                            if(token != null) {
+                            if (token != null) {
                                 AuthStore.setAuthToken(token, applicationContext)
                                 callback()
-                            }
-                            else error = AuthErrorMessage.INCORRECT_LOGIN_OR_PASSWORD
+                            } else error = AuthErrorMessage.INCORRECT_LOGIN_OR_PASSWORD
                         }
                     },
                     shape = RoundedCornerShape(50),
@@ -298,26 +332,35 @@ class AuthActivity : ComponentActivity() {
     @SuppressLint("SimpleDateFormat")
     @Composable
     fun WelcomeMessage(user: User?, group: Group?, year: Year?) {
-        val currentDate =  remember { SimpleDateFormat("d MMMM").format(Date()) }
+        val currentDate = remember { SimpleDateFormat("d MMMM").format(Date()) }
         val currentYear = remember { Calendar.getInstance().get(Calendar.YEAR); }
-        Column(Modifier.fillMaxWidth().animateContentSize(),
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .animateContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if(user !== null && group != null && year != null) {
-                Text("${stringResource(R.string.hello)} ${user.name}!",
+            if (user !== null && group != null && year != null) {
+                Text(
+                    "${stringResource(R.string.hello)} ${user.name}!",
                     color = ApplicationColors.White,
                     style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center)
-                Text("${stringResource(R.string.schedule_for_group)} ${group.name}",
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    "${stringResource(R.string.schedule_for_group)} ${group.name}",
                     color = ApplicationColors.White,
                     style = MaterialTheme.typography.titleSmall,
-                    textAlign = TextAlign.Center)
-                Text("$currentDate, ${year.getWeekOfDate(Date())} "+
-                        "${stringResource(R.string.education_week)}, ${currentYear}-"+
-                        "${currentYear+1} ${stringResource(R.string.education_year)}",
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    "$currentDate, ${year.getWeekOfDate(Date())} " +
+                            "${stringResource(R.string.education_week)}, ${currentYear}-" +
+                            "${currentYear + 1} ${stringResource(R.string.education_year)}",
                     color = ApplicationColors.White,
                     style = MaterialTheme.typography.labelSmall,
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

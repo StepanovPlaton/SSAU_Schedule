@@ -3,8 +3,6 @@ package com.example.ssau_schedule.data.store
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 data class GeneralData(
     val token: String,

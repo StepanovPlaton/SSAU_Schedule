@@ -30,7 +30,7 @@ data class Year(
         calendar.time = startDate
         val firstWeek = calendar.get(Calendar.WEEK_OF_YEAR)
         calendar.time = date
-        return (calendar.get(Calendar.WEEK_OF_YEAR) - firstWeek)+1
+        return (calendar.get(Calendar.WEEK_OF_YEAR) - firstWeek) + 1
     }
 }
 
@@ -57,6 +57,7 @@ class YearStore {
             val CURRENT_YEAR_END = stringPreferencesKey("year_end")
         }
     }
+
     companion object {
         suspend fun setCurrentYear(
             year: Year,
@@ -80,17 +81,22 @@ class YearStore {
             val currentYearId = context.yearStore.data
                 .map { yearStore -> yearStore[Keys.CURRENT_YEAR_ID] }.first()
             val currentYearStartDate = context.yearStore.data
-                .map { yearStore -> yearStore[Keys.CURRENT_YEAR_START]
+                .map { yearStore ->
+                    yearStore[Keys.CURRENT_YEAR_START]
                 }.first()
             val currentYearEndDate = context.yearStore.data
-                .map { yearStore -> yearStore[Keys.CURRENT_YEAR_END]
+                .map { yearStore ->
+                    yearStore[Keys.CURRENT_YEAR_END]
                 }.first()
-            return if(currentYearId != null &&
+            return if (currentYearId != null &&
                 currentYearStartDate != null &&
-                currentYearEndDate != null)
-                Year(id = currentYearId,
+                currentYearEndDate != null
+            )
+                Year(
+                    id = currentYearId,
                     startDate = Utils.Date.parse(currentYearStartDate),
-                    endDate = Utils.Date.parse(currentYearEndDate))
+                    endDate = Utils.Date.parse(currentYearEndDate)
+                )
             else null
         }
 

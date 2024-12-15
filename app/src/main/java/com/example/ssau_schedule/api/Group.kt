@@ -15,7 +15,7 @@ enum class GroupAPIErrorMessage(private val resource: Int?) {
     USER_NOT_AUTHORIZED(null);
 
     fun getMessage(context: Context) =
-        if(resource != null) context.getString(resource) else null
+        if (resource != null) context.getString(resource) else null
 }
 
 class GroupAPI(private var http: Http) {
@@ -25,9 +25,10 @@ class GroupAPI(private var http: Http) {
             BuildConfig.USER_GROUPS_URL,
             mapOf(
                 Pair("Cookie", token)
-            ).toHeaders())
-        if(response?.code == 401) return Pair(null, GroupAPIErrorMessage.USER_NOT_AUTHORIZED)
-        if(response?.body == null) return Pair(null, GroupAPIErrorMessage.FAILED_GET_USER_GROUPS)
+            ).toHeaders()
+        )
+        if (response?.code == 401) return Pair(null, GroupAPIErrorMessage.USER_NOT_AUTHORIZED)
+        if (response?.body == null) return Pair(null, GroupAPIErrorMessage.FAILED_GET_USER_GROUPS)
         else {
             try {
                 val groups = Utils.Serializer

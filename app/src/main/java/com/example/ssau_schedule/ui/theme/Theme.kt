@@ -5,6 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.glance.GlanceTheme
+import androidx.glance.color.ColorProviders
+import androidx.glance.material3.ColorProviders
 
 private val DarkColorScheme = darkColorScheme(
     primary = ApplicationColors.Primary01,
@@ -31,7 +34,16 @@ fun SSAU_ScheduleTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) = MaterialTheme(
-    colorScheme = if(darkTheme) DarkColorScheme else LightColorScheme,
+    colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
     typography = Typography,
+    content = content
+)
+
+@Composable
+fun SSAU_ScheduleWidgetTheme(
+    colors: ColorProviders = ColorProviders(light = LightColorScheme, dark = DarkColorScheme),
+    content: @Composable () -> Unit
+) = GlanceTheme(
+    colors = colors,
     content = content
 )

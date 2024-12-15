@@ -25,44 +25,69 @@ import com.example.ssau_schedule.ui.theme.LessonColors
 
 @Composable
 fun LessonCard(modifier: Modifier, lesson: Lesson) {
-    Row(modifier.fillMaxWidth()
-        .height(130.dp).padding(14.dp, 8.dp)
-        .shadow(elevation = 6.dp, shape = RoundedCornerShape(12.dp))
-        .background(
-            if(isSystemInDarkTheme())
-                lesson.type?.darkBackground ?: LessonColors.Background.Dark.Unknown
-            else lesson.type?.lightBackground ?: LessonColors.Background.Light.Unknown
-        )
+    Row(
+        modifier
+            .fillMaxWidth()
+            .height(130.dp)
+            .padding(14.dp, 8.dp)
+            .shadow(elevation = 6.dp, shape = RoundedCornerShape(12.dp))
+            .background(
+                if (isSystemInDarkTheme())
+                    lesson.type?.darkBackground ?: LessonColors.Background.Dark.Unknown
+                else lesson.type?.lightBackground ?: LessonColors.Background.Light.Unknown
+            )
     ) {
-        Box(modifier.fillMaxHeight().width(16.dp).shadow(4.dp)
-            .background(lesson.type?.foreground ?: LessonColors.Foreground.Unknown))
-        Column(modifier.fillMaxHeight().padding(10.dp, 10.dp),
-            verticalArrangement = Arrangement.SpaceBetween) {
-            Row(modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("${lesson.beginTime} - ${lesson.endTime}",
+        Box(
+            modifier
+                .fillMaxHeight()
+                .width(16.dp)
+                .shadow(4.dp)
+                .background(lesson.type?.foreground ?: LessonColors.Foreground.Unknown)
+        )
+        Column(
+            modifier
+                .fillMaxHeight()
+                .padding(10.dp, 10.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "${lesson.beginTime} - ${lesson.endTime}",
                     color = MaterialTheme.colorScheme.tertiary,
-                    style = MaterialTheme.typography.bodyMedium)
-                Text("512 - 5",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    "${lesson.room ?: "???"} - ${lesson.building ?: "?"}",
                     color = MaterialTheme.colorScheme.tertiary,
-                    style = MaterialTheme.typography.bodyMedium)
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-            AutoResizeText(lesson.discipline,
+            AutoResizeText(
+                lesson.discipline,
                 modifier = modifier.fillMaxWidth(),
                 fontSizeRange = FontSizeRange(10.sp, 24.sp),
                 color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleLarge)
-            Text(lesson.teacher,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                lesson.teacher,
                 modifier = modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.titleSmall)
+                style = MaterialTheme.typography.titleSmall
+            )
         }
     }
 }
 
 @Composable
 fun LessonCards(lessons: List<Lesson>) {
-    Box(Modifier.fillMaxHeight().fillMaxWidth()) {
+    Box(
+        Modifier
+            .fillMaxHeight()
+            .fillMaxWidth()) {
         LazyColumn {
             items(lessons.count()) {
                 LessonCard(Modifier, lessons[it])

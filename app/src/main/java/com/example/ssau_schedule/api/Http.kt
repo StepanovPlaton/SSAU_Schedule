@@ -43,8 +43,12 @@ class Http {
 
                 override fun onResponse(call: Call, response: Response) {
                     if (!response.isSuccessful)
-                        coroutine.resume(Pair(response,
-                            HttpRequestException("Http response is not successful")))
+                        coroutine.resume(
+                            Pair(
+                                response,
+                                HttpRequestException("Http response is not successful")
+                            )
+                        )
                     else coroutine.resume(Pair(response, null))
                 }
             })

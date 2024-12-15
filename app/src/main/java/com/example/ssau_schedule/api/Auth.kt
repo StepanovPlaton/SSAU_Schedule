@@ -8,7 +8,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONArray
-import kotlin.coroutines.suspendCoroutine
 
 enum class AuthErrorMessage(private val resource: Int?) {
     LOGIN_IS_TOO_SHORT(R.string.login_is_too_short),
@@ -16,7 +15,7 @@ enum class AuthErrorMessage(private val resource: Int?) {
     INCORRECT_LOGIN_OR_PASSWORD(R.string.incorrect_login_or_password);
 
     fun getMessage(context: Context) =
-        if(resource != null) context.getString(resource) else null
+        if (resource != null) context.getString(resource) else null
 }
 
 class AuthorizationAPI(private var http: Http) {
@@ -39,8 +38,9 @@ class AuthorizationAPI(private var http: Http) {
             ).toString().toRequestBody("application/json".toMediaType()),
             mapOf(
                 Pair("Next-Action", "b395d17834d8b7df06372cbf1f241170a272d540")
-            ).toHeaders())
-        val token = if(response?.headers?.toMap()?.containsKey("set-cookie") == true)
+            ).toHeaders()
+        )
+        val token = if (response?.headers?.toMap()?.containsKey("set-cookie") == true)
             response.headers("set-cookie").joinToString(", ") else null
         return Pair(token, exception)
     }

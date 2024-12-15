@@ -38,6 +38,7 @@ class LessonColors {
                 val Unknown = Color(0xFFE2E2E2)
             }
         }
+
         class Dark {
             companion object {
                 val Lecture = Color(0xFF444946)

@@ -22,7 +22,9 @@ class AuthStore {
         suspend fun setAuthToken(
             token: String,
             context: Context,
-        ) { context.authStore.edit { authStore -> authStore[Keys.AUTH_TOKEN] = token } }
+        ) {
+            context.authStore.edit { authStore -> authStore[Keys.AUTH_TOKEN] = token }
+        }
 
         fun setAuthToken(
             token: String,

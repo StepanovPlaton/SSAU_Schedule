@@ -19,4 +19,8 @@
     <string name="education_week">education week</string>
     <string name="education_year">education year</string>
     <string name="schedule_for_group">Schedule for the group</string>
+    <string name="failed_get_schedule">Failed to get a schedule!</string>
+    <string name="log_into_app_to_update">Log into the app to update your schedule</string>
+    <string name="no_classes_today">No classes today</string>
+    <string name="no_classes">No classes</string>
 </resources>

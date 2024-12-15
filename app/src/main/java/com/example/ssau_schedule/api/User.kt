@@ -14,7 +14,7 @@ enum class UserAPIErrorMessage(private val resource: Int?) {
     USER_NOT_AUTHORIZED(null);
 
     fun getMessage(context: Context) =
-        if(resource != null) context.getString(resource) else null
+        if (resource != null) context.getString(resource) else null
 }
 
 class UserAPI(private var http: Http) {
@@ -26,12 +26,13 @@ class UserAPI(private var http: Http) {
             BuildConfig.USER_DETAILS_URL,
             mapOf(
                 Pair("Cookie", token)
-            ).toHeaders())
-        if(response?.code == 401) return Pair(null, UserAPIErrorMessage.USER_NOT_AUTHORIZED)
-        if(response?.body == null) return Pair(null, UserAPIErrorMessage.FAILED_GET_USER_DETAILS)
+            ).toHeaders()
+        )
+        if (response?.code == 401) return Pair(null, UserAPIErrorMessage.USER_NOT_AUTHORIZED)
+        if (response?.body == null) return Pair(null, UserAPIErrorMessage.FAILED_GET_USER_DETAILS)
         return try {
             Pair(Utils.Serializer.decodeFromString<User>(response.body!!.string()), null)
-        } catch(e: SerializationException) {
+        } catch (e: SerializationException) {
             Pair(null, UserAPIErrorMessage.FAILED_GET_USER_DETAILS)
         } catch (e: IllegalArgumentException) {
             Pair(null, UserAPIErrorMessage.FAILED_GET_USER_DETAILS)
