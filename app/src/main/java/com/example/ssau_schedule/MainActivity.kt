@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
         val lessons = remember { mutableStateOf<List<Lesson>>(listOf()) }
         val animationScope = rememberCoroutineScope()
         val pagerState = rememberPagerState(
-            initialPage = Utils.Date.getDayOfWeek(Date()) - 1, pageCount = { Int.MAX_VALUE })
+            initialPage = Utils.Date.getDayOfWeek(Date()), pageCount = { Int.MAX_VALUE })
         val studyYear = remember { mutableStateOf<Year?>(null) }
         val loadedWeeks = remember { mutableStateOf<List<Int>>(listOf()) }
         val workStarted = remember { mutableStateOf(false) }
@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                 studyYear.value = generalData.year
                 val day = Utils.Date.addDays(
                     Date(),
-                    pagerState.currentPage - Utils.Date.getDayOfWeek(Date())+1
+                    pagerState.currentPage - Utils.Date.getDayOfWeek(Date())
                 )
                 var week = generalData.year.getWeekOfDate(day)
                 if (!loadedWeeks.value.contains(week)) getLessons(generalData, week)
@@ -224,7 +224,7 @@ class MainActivity : ComponentActivity() {
                                                 Date(),
                                                 pagerState.currentPage - Utils.Date.getDayOfWeek(
                                                     Date()
-                                                )+1
+                                                )
                                             )
                                         ),
                                         color = MaterialTheme.colorScheme.primary,
@@ -258,10 +258,10 @@ class MainActivity : ComponentActivity() {
                     HorizontalPager(state = pagerState) { page ->
                         val todayLessons = lessons.value.filter { lesson ->
                             lesson.dayOfWeek - 1 == Utils.Date.getDayOfWeek(
-                                Utils.Date.addDays(Date(), page - Utils.Date.getDayOfWeek(Date())+1)
+                                Utils.Date.addDays(Date(), page - Utils.Date.getDayOfWeek(Date()))
                             ) &&
-                                    lesson.week == Utils.Date.getWeekOfStudyYear(
-                                Utils.Date.addDays(Date(), page - Utils.Date.getDayOfWeek(Date())+1)
+                                    lesson.week - 1 == Utils.Date.getWeekOfStudyYear(
+                                Utils.Date.addDays(Date(), page - Utils.Date.getDayOfWeek(Date()))
                             )
                         }.sortedBy { lesson -> lesson.beginTime }
                         if (todayLessons.isEmpty())

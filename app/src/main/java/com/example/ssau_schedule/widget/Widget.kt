@@ -65,7 +65,7 @@ class ScheduleWidget : GlanceAppWidget() {
                                     it
                                 )
                             ) &&
-                                    lesson.week == Utils.Date.getWeekOfStudyYear(Date())
+                                    lesson.week - 1 == Utils.Date.getWeekOfStudyYear(Date())
                         }.sortedBy { lesson -> lesson.beginTime }
 
                         Box(
